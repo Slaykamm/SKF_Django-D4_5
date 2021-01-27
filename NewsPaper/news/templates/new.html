@@ -1,5 +1,7 @@
 {% extends 'default.html' %}
 
+{% load custom_filters %}
+
 <!-- Название у нас будет Новости -->
 {% block title %}
 News 
@@ -17,7 +19,7 @@ News
                 Заглавие
             </td>
             <td>
-                Дата публикации
+                Дата и время публикации
             </td>
             <td>
                 Содержание
@@ -26,13 +28,13 @@ News
 
         <tr>
             <td>
-                {{post.post_title}}
+                {{post.post_title|censor}}
             </td>
             <td>
-                {{post.post_datetime|date:'d M Y'}}
+                {{post.post_datetime|date:'d M Y G:i'}}
             </td>
             <td>
-                {{post.article_text|truncatewords:20 }}
+                {{post.article_text|truncatewords:20 |censor}}
                 
             </td>
         </tr>
