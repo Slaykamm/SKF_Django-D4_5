@@ -13,7 +13,7 @@ def censor(value):
     for word in operate_text:
             
         if word in rude_words:
-            censored_text += "БЫЛ МАТ" + " "
+            censored_text += "МАТ" + " "
         else:
             censored_text += word + " "
     return str(censored_text) 

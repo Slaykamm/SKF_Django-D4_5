@@ -8,11 +8,23 @@ NEWS
  
 <!-- В контенте на странице мы выводим все товары -->
 {% block content %}
-<h4> {{ time_now }} </h4> 
-    <h1>Новости Главная</h1>
-    <HR WIDTH="100%" ALIGN="center" SIZE="5">
+<!-- <h4> {{ time_now }} </h4> -->
+    <h1>Поиск</h1>
 
-    <h3> Отображено новостей на странице: {{ posts|length  }} </h3>
+    <h3> Найдено новостей на сайте: {{ filter.qs|length  }} </h3>
+    
+
+<!-- Перед таблицей добавим форму для поиска -->
+    <form method="GET">
+        
+        {{ filter.form }}<br>
+        <br> <!-- Форму от фильтров за нас сделает django. А вот кнопку, увы придётся делать самому -->
+        <br>
+        <input type="submit" value="Найти"><br>
+
+    </form>
+    <br>
+    <br>
 
     <table>
     <thead>
@@ -20,26 +32,21 @@ NEWS
             <p style="text-align: center;"><strong>Наименование статьи</strong></p>
         </th>
         <th>
-            <p style="text-align: center;"><strong>Дата публикации</strong></p>
+            <p style="text-align: center;"><strong></strong>Дата публикации</strong></p>
         </th>
         <th>
-            <p style="text-align: center;"><strong>Тип: </strong></p>
+            <p style="text-align: center;"><strong></strong>Автор</strong></p>
         </th>
         <th>
-            <p style="text-align: center;"><strong>Автор </strong></p>
+            Содержание
         </th>
-        <th>
-            <p style="text-align: center;"><strong>Рейтинг </strong></p>
-        </th>
-
 
     </thead>
-    {% for post in posts %} <!-- поменяем products на filter.qs, т.к. теперь мы забираем уже отобранную по каким-то параметрам информацию -->
+    {% for post in filter.qs %} <!-- поменяем products на filter.qs, т.к. теперь мы забираем уже отобранную по каким-то параметрам информацию -->
     <tr>
         <td>
-            <a href="{% url 'news_detail' post.id %}">{{ post.post_title|truncatewords:7 |censor}}</a> <!-- При нажатии на имя товара в таблице нас теперь будет перекидывать на страницу с информацией о товаре -->
-            <a href="{% url 'post_update' post.id %}"><u><strong>Редактировать</strong></u></a> <!-- добавим ссылку на редактирование товара-->
-            <a href="{% url 'post_delete' post.id %}"><u><strong>Удалить</strong> </u></a> <!-- добавим ссылку на удаление товара-->
+            <a href="{% url 'news_detail' post.id %}">{{ post.post_title |censor}}</a> <!-- При нажатии на имя товара в таблице нас теперь будет перекидывать на страницу с информацией о товаре -->
+
 
 
         </td>
@@ -47,13 +54,10 @@ NEWS
             {{post.post_datetime|date:'d M Y'}}
         </td>
         <td>
-            {{post.typeNews }}
-        </td>
-        <td>
             {{post.author_post }}
         </td>
         <td>
-            {{post.rating_article }}
+            {{post.article_text|truncatechars:30 |censor }}
         </td>
 
     </tr>

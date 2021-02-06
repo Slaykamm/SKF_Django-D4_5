@@ -54,6 +54,9 @@ class Post(models.Model):
     def __str__(self):
         return self.post_title
 
+    def get_absolute_url(self): # добавим абсолютный путь чтобы после создания нас перебрасывало на страницу с товаром
+        return f'/news/{self.id}' 
+
     def post_like(self):
         self.rating_article += 1
         self.save()
@@ -65,6 +68,17 @@ class Post(models.Model):
     def preview(self):
         text_preview = self.article_text[:124]+'...'
         return text_preview
+
+    def typeNews(self):
+        choice = self.position
+        if choice == 'AR':
+            pos = 'Статья'
+        else:
+            pos = 'Новость'
+        return pos
+
+
+    
 
 class PostCategory(models.Model):
     category_post = models.ForeignKey(Post, on_delete=models.CASCADE)

@@ -11,7 +11,7 @@ News
 
 {% block content %}
 <h4> {{ time_now }}    </h4>
-    <h1>Новость:</h1>
+    <h1>Подробно:</h1>
     {% if post %}
     <table>
         <tr>
@@ -31,10 +31,12 @@ News
                 {{post.post_title|censor}}
             </td>
             <td>
-                {{post.post_datetime|date:'d M Y G:i'}}
+              <!--  {{post.post_datetime|date:'d M Y G:i'}} -->
+                {{post.post_datetime|date:'d M Y'}}
+
             </td>
             <td>
-                {{post.article_text|truncatewords:20 |censor}}
+                {{post.article_text|censor}}
                 
             </td>
         </tr>
