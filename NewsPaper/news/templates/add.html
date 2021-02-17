@@ -6,10 +6,17 @@
 NEWS
 {% endblock title %}
  
+
+
 <!-- В контенте на странице мы выводим все товары -->
 {% block content %}
 <!-- <h4> {{ time_now }} </h4> -->
     <h1>Добавить Новость</h1>
+
+    {% if is_not_author %}
+    <button> <a href="/sign/upgrade/"> Стать автором!</a> </button>
+    {% endif %}
+
 
     <form method="POST">
         {% csrf_token %} 
@@ -32,3 +39,5 @@ NEWS
      
 {% endblock content %}
     
+
+

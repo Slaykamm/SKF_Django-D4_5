@@ -1,12 +1,15 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView # импортируем класс, который говорит нам о том, что в этом представлении мы будем выводить список объектов из БД
 from .models import Post, Author, Category, PostCategory, Comment, User
 from datetime import datetime
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.shortcuts import render
 from django.views import View # импортируем простую вьюшку
 from django.core.paginator import Paginator
 from .filters import NewsFilter # импортируем недавно написанный фильтр
 from .forms import PostForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView
 
 
 
@@ -60,7 +63,9 @@ class PostSearch(ListView):
  
         return super().get(request, *args, **kwargs)
 
-class PostUpdateView(UpdateView):
+class PostUpdateView(LoginRequiredMixin, UpdateView):
+
+    #model = Post
     template_name = 'add.html'
     form_class = PostForm
 
@@ -68,7 +73,13 @@ class PostUpdateView(UpdateView):
     def get_object(self, **kwargs):
         id = self.kwargs.get('pk')
         return Post.objects.get(pk=id)
- 
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_author'] = not self.request.user.groups.filter(name = 'authors').exists()
+        return context
+
+
  
 # дженерик для удаления товара
 class PostDeleteView(DeleteView):
