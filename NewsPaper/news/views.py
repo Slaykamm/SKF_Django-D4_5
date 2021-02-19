@@ -8,7 +8,6 @@ from django.views import View # импортируем простую вьюшк
 from django.core.paginator import Paginator
 from .filters import NewsFilter # импортируем недавно написанный фильтр
 from .forms import PostForm
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 
 
@@ -26,6 +25,7 @@ class PostList(ListView):
         context = super().get_context_data(**kwargs)
         context['time_now'] = datetime.now()
         #context['filter'] = NewsFilter(self.request.GET, queryset=self.get_queryset()) # вписываем наш фильтр в контекст
+        context['logged_user'] = self.request.user.username
         return context
 
 class PostDetailView(DetailView):
@@ -34,9 +34,19 @@ class PostDetailView(DetailView):
 #    context_object_name = 'post'   # это имя списка, в котором будут лежать все объекты, его надо указать, чтобы обратиться к самому списку объектов через html-шаблон
     queryset = Post.objects.all()
 
+
 class PostCreateView(CreateView):
+#    model = Post  # указываем модель, объекты которой мы будем выводить
     template_name = 'add.html'
+    #context_object_name = 'post_create'
     form_class = PostForm
+
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['logged_user'] = self.request.user.username
+        return context
 
 
 class PostSearch(ListView):
@@ -51,6 +61,7 @@ class PostSearch(ListView):
 
         context['categories'] = Category.objects.all()
         context['form'] = PostForm()  # added
+        context['logged_user'] = self.request.user.username
                 
         return context
 
@@ -77,7 +88,11 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['is_not_author'] = not self.request.user.groups.filter(name = 'authors').exists()
+        context['logged_user'] = self.request.user.username
+        print('aaa')
         return context
+
+
 
 
  

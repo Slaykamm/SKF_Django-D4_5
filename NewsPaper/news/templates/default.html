@@ -37,12 +37,22 @@
           <li class="nav-item">
             <a class="nav-link" href="/news/add/">Добавить новость</a>
           </li>
+          {% if not logged_user %}
+                      
           <li class="nav-item active">
             <a class="nav-link" href="/accounts/login/">Login            </a>
           </li>
+          {% else %}
+          <li class="nav-item active">
+            <a class="nav-link" > {{logged_user}}            </a>
+          </li>
+          {% endif %}
           <li class="nav-item active">
             <a class="nav-link" href="/sign/logout/">LogOut            </a>
           </li>
+          
+
+          
 
 
         </ul>
