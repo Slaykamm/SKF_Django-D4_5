@@ -2,6 +2,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .models import Post, Author, Category, PostCategory, Comment, User
 from datetime import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from django.shortcuts import render
 from django.views import View # импортируем простую вьюшку
@@ -74,11 +75,12 @@ class PostSearch(ListView):
  
         return super().get(request, *args, **kwargs)
 
-class PostUpdateView(LoginRequiredMixin, UpdateView):
+class PostUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
 
     #model = Post
     template_name = 'add.html'
     form_class = PostForm
+    permission_required = ('news.add_post',)
 
     # метод get_object мы используем вместо queryset, чтобы получить информацию об объекте который мы собираемся редактировать
     def get_object(self, **kwargs):
